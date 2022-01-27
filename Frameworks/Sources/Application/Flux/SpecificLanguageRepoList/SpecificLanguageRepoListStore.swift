@@ -12,12 +12,12 @@ import Domain
 public final class SpecificLanguageRepoListStore: ObservableObject {
   public static let shared = SpecificLanguageRepoListStore()
 
-  /// 検索語
-  @Published public var searchQuery = ""
+  /// 検索実行したテキスト
+  @Published public private(set) var searchQuery = ""
   /// エラータイトル
-  @Published public var errorTitle = ""
+  @Published public private(set) var errorTitle = ""
   /// エラーメッセージ
-  @Published public var errorMessage = ""
+  @Published public private(set) var errorMessage = ""
   /// エラーダイアログトリガー
   @Published public var isErrorShown = false
   /// リポジトリ一覧
@@ -28,6 +28,8 @@ public final class SpecificLanguageRepoListStore: ObservableObject {
       guard let self = self else { return }
 
       switch action {
+      case .updateSearchQuery(let searchQuery):
+        self.searchQuery = searchQuery
       case .updateRepoList(let newValue):
         self.languagesRepoAggregateRoot.set(newValue: newValue)
       case .updateErrorMessage(let title, let message):

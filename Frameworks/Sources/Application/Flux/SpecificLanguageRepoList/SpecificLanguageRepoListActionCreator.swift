@@ -11,7 +11,7 @@ import Domain
 
 public final class SpecificLanguageRepoListActionCreator {
   private let dispatcher: SpecificLanguageRepoListDispatcher
-  private let searchRepositoriesSubject = PassthroughSubject<String, Never>()
+  private let searchRepositoriesSubject = PassthroughSubject<(String, Bool), Never>()
   private let responseSubject = PassthroughSubject<LanguagesRepoAggregateRoot, Never>()
   private let additionalSearchRepositoriesSubject = PassthroughSubject<(String, Int), Never>()
   private let additionalResponseSubject = PassthroughSubject<LanguagesRepoAggregateRoot, Never>()
@@ -32,6 +32,12 @@ public final class SpecificLanguageRepoListActionCreator {
     // searchRepositoriesSubjectにstringが送られてきたらAPIリクエストする
     let responseStream =
       searchRepositoriesSubject
+      .filter { $1 }
+      .map { [dispatcher] tuple -> String in
+        let searchQuery = "language:\(tuple.0)"
+        dispatcher.dispatch(.updateSearchQuery(searchQuery))
+        return searchQuery
+      }
       .share()
       .flatMap { [languagesRepoRepository] searchQuery in
         languagesRepoRepository.response(searchQuery: searchQuery, page: 1)
@@ -119,8 +125,8 @@ public final class SpecificLanguageRepoListActionCreator {
 // MARK: - Input
 extension SpecificLanguageRepoListActionCreator {
 
-  public func onPageAppear(searchQuery: String) {
-    searchRepositoriesSubject.send(searchQuery)
+  public func onPageAppear(language: String, isEmpty: Bool) {
+    searchRepositoriesSubject.send((language, isEmpty))
   }
 
   public func reachedBottom(searchQuery: String, page: Int) {

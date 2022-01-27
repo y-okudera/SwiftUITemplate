@@ -57,10 +57,7 @@ struct SpecificLanguageRepoListView<R: SpecificLanguageRepoListRouter>: View {
       TitleNavBarItem(title: language)
     }
     .onPageAppear {
-      store.searchQuery = "language:\(language)"
-      if store.languagesRepoAggregateRoot.filterByLanguage(language).isEmpty {
-        actionCreator.onPageAppear(searchQuery: store.searchQuery)
-      }
+      actionCreator.onPageAppear(language: language, isEmpty: store.languagesRepoAggregateRoot.filterByLanguage(language).isEmpty)
     }
   }
 }

@@ -9,6 +9,8 @@
 import Domain
 
 enum SpecificLanguageRepoListAction {
+  /// 検索実行したテキストの変更を反映
+  case updateSearchQuery(String)
   /// 読み込み結果を反映
   case updateRepoList(LanguagesRepoAggregateRoot)
   /// エラーメッセージを反映
