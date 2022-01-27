@@ -22,7 +22,7 @@ struct RepoListView<R: RepoListRouter>: View {
   }
 
   var body: some View {
-    SearchNavigation(text: $store.searchQuery, search: { actionCreator.searchRepositories(searchQuery: store.searchQuery) }) {
+    SearchNavigation(text: $store.inputText, search: { actionCreator.searchRepositories(inputText: store.inputText) }) {
       List {
         ForEach(store.repoAggregateRoot.repositories) { repository in
           RepoListRow(title: repository.fullName, language: repository.language ?? "") {

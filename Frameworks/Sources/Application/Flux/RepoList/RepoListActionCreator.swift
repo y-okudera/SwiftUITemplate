@@ -35,6 +35,7 @@ public final class RepoListActionCreator {
       .share()
       .map { [dispatcher] searchQuery in
         dispatcher.dispatch(.initializePage)
+        dispatcher.dispatch(.updateSearchQuery(searchQuery))
         return searchQuery
       }
       .flatMap { [repoRepository] searchQuery in
@@ -121,8 +122,8 @@ public final class RepoListActionCreator {
 // MARK: - Input
 extension RepoListActionCreator {
 
-  public func searchRepositories(searchQuery: String) {
-    searchRepositoriesSubject.send(searchQuery)
+  public func searchRepositories(inputText: String) {
+    searchRepositoriesSubject.send(inputText)
   }
 
   public func additionalSearchRepositories(searchQuery: String, page: Int) {
