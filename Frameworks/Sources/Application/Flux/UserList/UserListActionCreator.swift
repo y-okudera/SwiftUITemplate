@@ -35,6 +35,7 @@ public final class UserListActionCreator {
       .share()
       .map { [dispatcher] searchQuery in
         dispatcher.dispatch(.initializePage)
+        dispatcher.dispatch(.updateSearchQuery(searchQuery))
         return searchQuery
       }
       .flatMap { [userRepository] searchQuery in
@@ -121,8 +122,8 @@ public final class UserListActionCreator {
 // MARK: - Input
 extension UserListActionCreator {
 
-  public func searchUsers(searchQuery: String) {
-    searchUsersSubject.send(searchQuery)
+  public func searchUsers(inputText: String) {
+    searchUsersSubject.send(inputText)
   }
 
   public func additionalSearchUsers(searchQuery: String, page: Int) {

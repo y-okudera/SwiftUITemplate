@@ -22,7 +22,7 @@ struct UserListView<R: UserListRouter>: View {
   }
 
   var body: some View {
-    SearchNavigation(text: $store.searchQuery, search: { actionCreator.searchUsers(searchQuery: store.searchQuery) }) {
+    SearchNavigation(text: $store.inputText, search: { actionCreator.searchUsers(inputText: store.inputText) }) {
       List {
         ForEach(store.userAggregateRoot.users) { user in
           UserListRow(title: user.login, avatarUrl: user.avatarUrl) {
