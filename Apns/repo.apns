@@ -1,0 +1,9 @@
+{
+    "Simulator Target Bundle": "jp.yuoku.GitHubApp",
+    "aps": {
+        "alert": "テスト通知-リポジトリ表示",
+        "sound": "default",
+        "badge": 1
+    },
+    "url": "gitHubApp://repo?url=https://github.com/octocat/Spoon-Knife"
+}

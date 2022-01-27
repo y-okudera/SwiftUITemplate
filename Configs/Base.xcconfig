@@ -1,0 +1,19 @@
+//
+//  Base.xcconfig
+//  App
+//
+//  Created by okudera on 2022/01/27.
+//  Copyright © 2022 yuoku. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+TARGETED_DEVICE_FAMILY = 1,2
+IPHONEOS_DEPLOYMENT_TARGET = 14.0
+INFOPLIST_KEY_NSHumanReadableCopyright = Copyright © 2022 yuoku. All rights reserved.
+SWIFT_EMIT_LOC_STRINGS = YES
+GENERATE_INFOPLIST_FILE = YES
+CURRENT_PROJECT_VERSION = 1
+MARKETING_VERSION = 1.0
+SWIFT_VERSION = 5.0

@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  Presentation
+
+  Created by Yuki Okudera on 2022/01/23.
+  Copyright © 2022 yuoku. All rights reserved.
+*/
+
+// MARK: - RootView.swift
+
+"root_view.tab.repositories" = "リポジトリ";
+"root_view.tab.users" = "ユーザー";
+"root_view.tab.languages" = "プログラミング言語";
+
+// MARK: - RepoListView.swift
+
+"repo_list_view.navigation_bar_title.repositories" = "リポジトリ";
+
+// MARK: - UserListView.swift
+
+"user_list_view.navigation_bar_title.users" = "ユーザー";

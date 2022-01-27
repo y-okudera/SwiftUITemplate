@@ -1,0 +1,15 @@
+//
+//  Application.Release.xcconfig
+//  App
+//
+//  Created by Yuki Okudera on 2022/01/16.
+//  Copyright © 2022 yuoku. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Application.Base.xcconfig"
+
+//:configuration = Release
+VALIDATE_PRODUCT = YES

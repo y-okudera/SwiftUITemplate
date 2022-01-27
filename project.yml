@@ -1,0 +1,221 @@
+# https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md
+
+# プロジェクト全体の設定
+name: App
+fileGroups: [App]
+configs:
+  Debug: debug
+  Release: release
+configFiles:
+  Debug: Configs/Project.Debug.xcconfig
+  Release: Configs/Project.Release.xcconfig
+options:
+  minimumXcodeGenVersion: "2.25.0"
+  usesTabs: false
+  indentWidth: 2
+  tabWidth: 2
+  deploymentTarget:
+    iOS: "14.0"
+  developmentLanguage: ja
+attributes:
+  ORGANIZATIONNAME: "yuoku"
+packages: # SwiftPMで扱うPackageを最初に定義
+  swift-request:
+    url: https://github.com/carson-katri/swift-request
+    exactVersion: 1.4.0
+  Kingfisher:
+    url: https://github.com/onevcat/Kingfisher
+    exactVersion: 7.1.2
+  PagerTabStripView:
+    url: https://github.com/xmartlabs/PagerTabStripView
+    exactVersion: 3.1.1
+
+####################
+
+# ビルドターゲット
+targets:
+  # application
+  App:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Configs/Project.Debug.xcconfig
+      Release: Configs/Project.Release.xcconfig
+    sources:
+      - path: App
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+      - path: Configs
+    dependencies:
+      - target: Presentation
+      - target: Application
+      - target: Domain
+      - target: Infrastructure
+    postCompileScripts:
+      - path: ./Scripts/swift-format.sh
+        name: swift-format
+####################
+  # Infrastructure framework
+  Infrastructure:
+    type: framework
+    platform: iOS
+    configFiles:
+      Debug: Configs/Infrastructure.Debug.xcconfig
+      Release: Configs/Infrastructure.Release.xcconfig
+    scheme: {}
+    sources:
+      - path: Frameworks/Sources/Infrastructure
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+    dependencies:
+      - package: swift-request
+        product: Request
+      - package: swift-request
+        product: Json
+      - target: Domain
+####################
+  # Domain framework
+  Domain:
+    type: framework
+    platform: iOS
+    configFiles:
+      Debug: Configs/Domain.Debug.xcconfig
+      Release: Configs/Domain.Release.xcconfig
+    scheme: {}
+    sources:
+      - path: Frameworks/Sources/Domain
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+####################
+  # Application framework
+  Application:
+    type: framework
+    platform: iOS
+    configFiles:
+      Debug: Configs/Application.Debug.xcconfig
+      Release: Configs/Application.Release.xcconfig
+    scheme: {}
+    sources:
+      - path: Frameworks/Sources/Application
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+    dependencies:
+      - target: Domain
+      - target: Infrastructure # RepositoriesのDI用
+####################
+  # Presentation framework
+  Presentation:
+    type: framework
+    platform: iOS
+    configFiles:
+      Debug: Configs/Presentation.Debug.xcconfig
+      Release: Configs/Presentation.Release.xcconfig
+    scheme: {}
+    sources:
+      - path: Frameworks/Sources/Presentation
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+    dependencies:
+      - target: Application
+      - package: Kingfisher
+        product: Kingfisher
+      - package: PagerTabStripView
+        product: PagerTabStripView
+  # Infrastructure frameworkのUnitTestターゲット
+  InfrastructureTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+      BUNDLE_NAME: 'framework.infrastructure.tests'
+      configs:
+        Debug:
+          VALIDATE_WORKSPACE: YES
+    sources:
+      - Frameworks/Tests/InfrastructureTests
+    dependencies:
+      - target: Infrastructure
+#####################
+  # Domain frameworkのUnitTestターゲット
+  DomainTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+      BUNDLE_NAME: 'framework.domain.tests'
+      configs:
+        Debug:
+          VALIDATE_WORKSPACE: YES
+    sources:
+      - Frameworks/Tests/DomainTests
+    dependencies:
+      - target: Domain
+#####################
+  # Application frameworkのUnitTestターゲット
+  ApplicationTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+      BUNDLE_NAME: 'framework.application.tests'
+      configs:
+        Debug:
+          VALIDATE_WORKSPACE: YES
+    sources:
+      - Frameworks/Tests/ApplicationTests
+    dependencies:
+      - target: Application
+#####################
+  # Presentation frameworkのUnitTestターゲット
+  PresentationTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+      BUNDLE_NAME: 'framework.presentation.tests'
+      configs:
+        Debug:
+          VALIDATE_WORKSPACE: YES
+    sources:
+      - Frameworks/Tests/PresentationTests
+    dependencies:
+      - target: Presentation
+
+#####################
+
+# スキーム定義
+schemeTemplates:
+  AppScheme:
+    build:
+      targets:
+        App: all
+        InfrastructureTests: [test]
+        DomainTests: [test]
+        ApplicationTests: [test]
+        PresentationTests: [test]
+    run:
+      config: ${debugConfig}
+    test:
+      config: ${debugConfig}
+      targets:
+        - InfrastructureTests
+        - DomainTests
+        - ApplicationTests
+        - PresentationTests
+    profile:
+      config: ${releaseConfig}
+    analyze:
+      config: ${debugConfig}
+    archive:
+      config: ${releaseConfig}
+schemes:
+  App:
+    templates: [AppScheme]
+    templateAttributes:
+      debugConfig: Debug
+      releaseConfig: Release

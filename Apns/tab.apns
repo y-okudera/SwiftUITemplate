@@ -1,0 +1,9 @@
+{
+    "Simulator Target Bundle": "jp.yuoku.GitHubApp",
+    "aps": {
+        "alert": "テスト通知-タブ切り替え",
+        "sound": "default",
+        "badge": 1
+    },
+    "url": "gitHubApp://tab?index=2"
+}

@@ -1,0 +1,27 @@
+//
+//  Infrastructure.Base.xcconfig
+//  App
+//
+//  Created by Yuki Okudera on 2022/01/16.
+//  Copyright © 2022 yuoku. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Base.xcconfig"
+
+INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
+SKIP_INSTALL = YES
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+DYLIB_INSTALL_NAME_BASE = @rpath
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+DEFINES_MODULE = YES
+PRODUCT_BUNDLE_IDENTIFIER = jp.yuoku.Infrastructure
+PRODUCT_NAME = $(TARGET_NAME:c99extidentifier)
+CODE_SIGN_IDENTITY = iPhone Developer
+CODE_SIGN_STYLE = Automatic
+VERSION_INFO_PREFIX =
+VERSIONING_SYSTEM = apple-generic
+CLANG_CXX_LANGUAGE_STANDARD = gnu++17
