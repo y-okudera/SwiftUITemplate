@@ -13,12 +13,13 @@ struct RepoListView<R: RepoListRouter>: View {
   @Environment(\.colorScheme) private var colorScheme
   @ObservedObject var store: RepoListStore
   @StateObject private var router: R
-  private var actionCreator: RepoListActionCreator
 
-  init(store: RepoListStore = .shared, router: R, actionCreator: RepoListActionCreator = .init()) {
+  @Injected(\.repoListActionCreatorProvider)
+  private var actionCreator: RepoListActionCreatorProviding
+
+  init(store: RepoListStore = .shared, router: R) {
     self.store = store
     _router = StateObject(wrappedValue: router)
-    self.actionCreator = actionCreator
   }
 
   var body: some View {

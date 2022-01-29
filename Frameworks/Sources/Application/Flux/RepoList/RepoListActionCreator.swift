@@ -9,7 +9,13 @@
 import Combine
 import Domain
 
-public final class RepoListActionCreator {
+public protocol RepoListActionCreatorProviding {
+  func searchRepositories(inputText: String)
+  func additionalSearchRepositories(searchQuery: String, page: Int)
+}
+
+public final class RepoListActionCreator: RepoListActionCreatorProviding {
+
   private let dispatcher: RepoListDispatcher
   private let searchRepositoriesSubject = PassthroughSubject<String, Never>()
   private let responseSubject = PassthroughSubject<RepoAggregateRoot, Never>()
@@ -28,7 +34,19 @@ public final class RepoListActionCreator {
     bindActions()
   }
 
-  func bindData() {
+  // MARK: - Input
+
+  public func searchRepositories(inputText: String) {
+    searchRepositoriesSubject.send(inputText)
+  }
+
+  public func additionalSearchRepositories(searchQuery: String, page: Int) {
+    additionalSearchRepositoriesSubject.send((searchQuery, page))
+  }
+
+  // MARK: - Binding
+
+  private func bindData() {
     // searchRepositoriesSubjectにstringが送られてきたらAPIリクエストする
     let responseStream =
       searchRepositoriesSubject
@@ -68,7 +86,7 @@ public final class RepoListActionCreator {
     ]
   }
 
-  func bindActions() {
+  private func bindActions() {
     // リポジトリ検索結果を反映
     let responseDataStream =
       responseSubject
@@ -116,17 +134,5 @@ public final class RepoListActionCreator {
       errorDataStream,
       errorStream,
     ]
-  }
-}
-
-// MARK: - Input
-extension RepoListActionCreator {
-
-  public func searchRepositories(inputText: String) {
-    searchRepositoriesSubject.send(inputText)
-  }
-
-  public func additionalSearchRepositories(searchQuery: String, page: Int) {
-    additionalSearchRepositoriesSubject.send((searchQuery, page))
   }
 }

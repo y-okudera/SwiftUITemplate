@@ -15,16 +15,13 @@ struct SpecificLanguageRepoListView<R: SpecificLanguageRepoListRouter>: View {
   @ObservedObject private var store: SpecificLanguageRepoListStore = .shared
   @StateObject private var router: R
   private let language: String
-  private var actionCreator: SpecificLanguageRepoListActionCreator
 
-  init(
-    router: R,
-    actionCreator: SpecificLanguageRepoListActionCreator = .init(),
-    language: String
-  ) {
+  @Injected(\.specificLanguageRepoListActionCreatorProvider)
+  private var actionCreator: SpecificLanguageRepoListActionCreatorProviding
+
+  init(router: R, language: String) {
     _router = StateObject(wrappedValue: router)
     self.language = language
-    self.actionCreator = actionCreator
   }
 
   #warning(".pagerTabItemと.onPageAppearがあると、Previewが効かなくなるので修正が必要")

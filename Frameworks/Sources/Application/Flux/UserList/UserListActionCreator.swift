@@ -9,7 +9,13 @@
 import Combine
 import Domain
 
-public final class UserListActionCreator {
+public protocol UserListActionCreatorProviding {
+  func searchUsers(inputText: String)
+  func additionalSearchUsers(searchQuery: String, page: Int)
+}
+
+public final class UserListActionCreator: UserListActionCreatorProviding {
+
   private let dispatcher: UserListDispatcher
   private let searchUsersSubject = PassthroughSubject<String, Never>()
   private let responseSubject = PassthroughSubject<UserAggregateRoot, Never>()
@@ -28,7 +34,19 @@ public final class UserListActionCreator {
     bindActions()
   }
 
-  func bindData() {
+  // MARK: - Input
+
+  public func searchUsers(inputText: String) {
+    searchUsersSubject.send(inputText)
+  }
+
+  public func additionalSearchUsers(searchQuery: String, page: Int) {
+    additionalSearchUsersSubject.send((searchQuery, page))
+  }
+
+  // MARK: - Binding
+
+  private func bindData() {
     // searchUsersSubjectにstringが送られてきたらAPIリクエストする
     let responseStream =
       searchUsersSubject
@@ -68,7 +86,7 @@ public final class UserListActionCreator {
     ]
   }
 
-  func bindActions() {
+  private func bindActions() {
     // ユーザー検索結果を反映
     let responseDataStream =
       responseSubject
@@ -116,17 +134,5 @@ public final class UserListActionCreator {
       errorDataStream,
       errorStream,
     ]
-  }
-}
-
-// MARK: - Input
-extension UserListActionCreator {
-
-  public func searchUsers(inputText: String) {
-    searchUsersSubject.send(inputText)
-  }
-
-  public func additionalSearchUsers(searchQuery: String, page: Int) {
-    additionalSearchUsersSubject.send((searchQuery, page))
   }
 }

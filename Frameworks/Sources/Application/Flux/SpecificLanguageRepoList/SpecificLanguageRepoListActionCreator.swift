@@ -9,7 +9,12 @@
 import Combine
 import Domain
 
-public final class SpecificLanguageRepoListActionCreator {
+public protocol SpecificLanguageRepoListActionCreatorProviding {
+  func onPageAppear(language: String, isEmpty: Bool)
+  func reachedBottom(searchQuery: String, page: Int)
+}
+
+public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoListActionCreatorProviding {
   private let dispatcher: SpecificLanguageRepoListDispatcher
   private let searchRepositoriesSubject = PassthroughSubject<(String, Bool), Never>()
   private let responseSubject = PassthroughSubject<LanguagesRepoAggregateRoot, Never>()
@@ -28,7 +33,19 @@ public final class SpecificLanguageRepoListActionCreator {
     bindActions()
   }
 
-  func bindData() {
+  // MARK: - Input
+
+  public func onPageAppear(language: String, isEmpty: Bool) {
+    searchRepositoriesSubject.send((language, isEmpty))
+  }
+
+  public func reachedBottom(searchQuery: String, page: Int) {
+    additionalSearchRepositoriesSubject.send((searchQuery, page))
+  }
+
+  // MARK: - Binding
+
+  private func bindData() {
     // searchRepositoriesSubjectにstringが送られてきたらAPIリクエストする
     let responseStream =
       searchRepositoriesSubject
@@ -71,7 +88,7 @@ public final class SpecificLanguageRepoListActionCreator {
     ]
   }
 
-  func bindActions() {
+  private func bindActions() {
     // リポジトリ検索結果を反映
     let responseDataStream =
       responseSubject
@@ -119,17 +136,5 @@ public final class SpecificLanguageRepoListActionCreator {
       errorDataStream,
       errorStream,
     ]
-  }
-}
-
-// MARK: - Input
-extension SpecificLanguageRepoListActionCreator {
-
-  public func onPageAppear(language: String, isEmpty: Bool) {
-    searchRepositoriesSubject.send((language, isEmpty))
-  }
-
-  public func reachedBottom(searchQuery: String, page: Int) {
-    additionalSearchRepositoriesSubject.send((searchQuery, page))
   }
 }

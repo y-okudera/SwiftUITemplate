@@ -13,12 +13,13 @@ struct UserListView<R: UserListRouter>: View {
   @Environment(\.colorScheme) private var colorScheme
   @ObservedObject var store: UserListStore
   @StateObject private var router: R
-  private var actionCreator: UserListActionCreator
 
-  init(store: UserListStore = .shared, router: R, actionCreator: UserListActionCreator = .init()) {
+  @Injected(\.userListActionCreatorProvider)
+  private var actionCreator: UserListActionCreatorProviding
+
+  init(store: UserListStore = .shared, router: R) {
     self.store = store
     _router = StateObject(wrappedValue: router)
-    self.actionCreator = actionCreator
   }
 
   var body: some View {
