@@ -12,10 +12,10 @@ public struct RepoAggregateRoot {
   public let page: Int
   public let hasNext: Bool
   private let repositoryIDs: [String]
-  private let repositoriesByID: [String: RepoAggregate]
-  private let ownersByID: [String: UserAggregate]
+  private let repositoriesByID: [String: RepoEntity]
+  private let ownersByID: [String: UserEntity]
 
-  public var repositories: [RepoAggregate] {
+  public var repositories: [RepoEntity] {
     repositoryIDs.compactMap { repositoriesByID[$0] }
   }
 
@@ -23,8 +23,8 @@ public struct RepoAggregateRoot {
     page: Int,
     hasNext: Bool,
     repositoryIDs: [String],
-    repositoriesByID: [String: RepoAggregate],
-    ownersByID: [String: UserAggregate]
+    repositoriesByID: [String: RepoEntity],
+    ownersByID: [String: UserEntity]
   ) {
     self.page = page
     self.hasNext = hasNext
@@ -56,13 +56,13 @@ public struct RepoAggregateRoot {
 #if DEBUG
   extension RepoAggregateRoot {
     public static var mock: Self {
-      let repoAggregateMockArray = RepoAggregate.mockArray
+      let repoEntityMockArray = RepoEntity.mockArray
       return Self(
         page: 1,
         hasNext: true,
-        repositoryIDs: repoAggregateMockArray.map { $0.id },
-        repositoriesByID: repoAggregateMockArray.reduce(into: [String: RepoAggregate]()) { $0[$1.id] = $1 },
-        ownersByID: repoAggregateMockArray.reduce(into: [String: UserAggregate]()) { $0[$1.owner.id] = $1.owner }
+        repositoryIDs: repoEntityMockArray.map { $0.id },
+        repositoriesByID: repoEntityMockArray.reduce(into: [String: RepoEntity]()) { $0[$1.id] = $1 },
+        ownersByID: repoEntityMockArray.reduce(into: [String: UserEntity]()) { $0[$1.owner.id] = $1.owner }
       )
     }
   }

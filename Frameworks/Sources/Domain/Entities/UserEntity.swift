@@ -1,5 +1,5 @@
 //
-//  UserAggregate.swift
+//  UserEntity.swift
 //  Domain
 //
 //  Created by Yuki Okudera on 2022/01/08.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct UserAggregate: Decodable, Hashable, Identifiable {
+public struct UserEntity: Decodable, Hashable, Identifiable {
   public let id: String
   public let login: String
   public let avatarUrl: URL
@@ -29,7 +29,7 @@ public struct UserAggregate: Decodable, Hashable, Identifiable {
 
 // MARK: - Mock
 #if DEBUG
-  extension UserAggregate {
+  extension UserEntity {
     public static var mock: Self {
       return Self(
         id: 583231.description,

@@ -12,13 +12,13 @@ public struct UserAggregateRoot {
   public let page: Int
   public let hasNext: Bool
   private let userIDs: [String]
-  private let usersByID: [String: UserAggregate]
+  private let usersByID: [String: UserEntity]
 
-  public var users: [UserAggregate] {
+  public var users: [UserEntity] {
     userIDs.compactMap { usersByID[$0] }
   }
 
-  public init(page: Int, hasNext: Bool, userIDs: [String], usersByID: [String: UserAggregate]) {
+  public init(page: Int, hasNext: Bool, userIDs: [String], usersByID: [String: UserEntity]) {
     self.page = page
     self.hasNext = hasNext
     self.userIDs = userIDs
@@ -40,12 +40,12 @@ public struct UserAggregateRoot {
 #if DEBUG
   extension UserAggregateRoot {
     public static func mock(mockAvatarUrl: URL) -> Self {
-      let userAggregateMockArray = UserAggregate.mockArray(mockAvatarUrl: mockAvatarUrl)
+      let userEntityMockArray = UserEntity.mockArray(mockAvatarUrl: mockAvatarUrl)
       return Self(
         page: 1,
         hasNext: true,
-        userIDs: userAggregateMockArray.map { $0.id },
-        usersByID: userAggregateMockArray.reduce(into: [String: UserAggregate]()) { $0[$1.id] = $1 }
+        userIDs: userEntityMockArray.map { $0.id },
+        usersByID: userEntityMockArray.reduce(into: [String: UserEntity]()) { $0[$1.id] = $1 }
       )
     }
   }

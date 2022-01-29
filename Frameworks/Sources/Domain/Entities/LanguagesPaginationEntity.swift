@@ -1,5 +1,5 @@
 //
-//  LanguagesPaginationAggregate.swift
+//  LanguagesPaginationEntity.swift
 //  Domain
 //
 //  Created by Yuki Okudera on 2022/01/23.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// searchQuery毎にPaginationを管理する
-public struct LanguagesPaginationAggregate: Identifiable, Hashable {
+public struct LanguagesPaginationEntity: Identifiable, Hashable {
   public let id: String
   public let page: Int
   public let hasNext: Bool
@@ -27,7 +27,7 @@ public struct LanguagesPaginationAggregate: Identifiable, Hashable {
 
 // MARK: - Mock
 #if DEBUG
-  extension LanguagesPaginationAggregate {
+  extension LanguagesPaginationEntity {
     public static var mock: Self {
       return Self(
         id: "Swift",

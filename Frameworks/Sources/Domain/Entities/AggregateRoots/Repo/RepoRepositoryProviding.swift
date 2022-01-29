@@ -1,5 +1,5 @@
 //
-//  RepoRepository.swift
+//  RepoRepositoryProviding.swift
 //  Domain
 //
 //  Created by Yuki Okudera on 2022/01/16.

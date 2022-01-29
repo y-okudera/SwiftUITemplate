@@ -1,5 +1,5 @@
 //
-//  RepoAggregate.swift
+//  RepoEntity.swift
 //  Domain
 //
 //  Created by Yuki Okudera on 2022/01/08.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-public struct RepoAggregate: Decodable, Hashable, Identifiable {
+public struct RepoEntity: Decodable, Hashable, Identifiable {
   public let id: String
   public let fullName: String
   public let description: String?
   public let stargazersCount: Int
   public let language: String?
   public let htmlUrl: URL
-  public let owner: UserAggregate
+  public let owner: UserEntity
 
   public init(
     id: String,
@@ -24,7 +24,7 @@ public struct RepoAggregate: Decodable, Hashable, Identifiable {
     stargazersCount: Int,
     language: String?,
     htmlUrl: URL,
-    owner: UserAggregate
+    owner: UserEntity
   ) {
     self.id = id
     self.fullName = fullName
@@ -38,7 +38,7 @@ public struct RepoAggregate: Decodable, Hashable, Identifiable {
 
 // MARK: - Mock
 #if DEBUG
-  extension RepoAggregate {
+  extension RepoEntity {
     public static var mock: Self {
       return Self(
         id: 1_300_192.description,
@@ -47,7 +47,7 @@ public struct RepoAggregate: Decodable, Hashable, Identifiable {
         stargazersCount: 10673,
         language: "HTML",
         htmlUrl: URL(string: "https://github.com/octocat/Spoon-Knife")!,
-        owner: UserAggregate(
+        owner: UserEntity(
           id: 583231.description,
           login: "octocat",
           avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,
@@ -65,7 +65,7 @@ public struct RepoAggregate: Decodable, Hashable, Identifiable {
           stargazersCount: $0,
           language: "HTML",
           htmlUrl: URL(string: "https://github.com/octocat/Spoon-Knife")!,
-          owner: UserAggregate(
+          owner: UserEntity(
             id: $0.description,
             login: "octocat",
             avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,

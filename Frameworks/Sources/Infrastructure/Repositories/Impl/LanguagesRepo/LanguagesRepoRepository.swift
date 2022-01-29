@@ -20,8 +20,8 @@ public struct LanguagesRepoRepository: LanguagesRepoRepositoryProviding {
     apiClient.response(from: SearchRepositoryRequest(searchQuery: searchQuery, page: page))
       .map { apiResponse in
         let repositoryIDs = apiResponse.response.items.map { $0.id.description }
-        let repositoriesByID = apiResponse.response.items.reduce(into: [String: RepoAggregate]()) {
-          $0[$1.id.description] = RepoAggregate(
+        let repositoriesByID = apiResponse.response.items.reduce(into: [String: RepoEntity]()) {
+          $0[$1.id.description] = RepoEntity(
             id: $1.id.description,
             fullName: $1.fullName,
             description: $1.description,
@@ -31,8 +31,8 @@ public struct LanguagesRepoRepository: LanguagesRepoRepositoryProviding {
             owner: .init(id: $1.owner.id.description, login: $1.owner.login, avatarUrl: $1.owner.avatarUrl, htmlUrl: $1.owner.htmlUrl)
           )
         }
-        let ownersByID = apiResponse.response.items.reduce(into: [String: UserAggregate]()) {
-          $0[$1.owner.id.description] = UserAggregate(
+        let ownersByID = apiResponse.response.items.reduce(into: [String: UserEntity]()) {
+          $0[$1.owner.id.description] = UserEntity(
             id: $1.owner.id.description,
             login: $1.owner.login,
             avatarUrl: $1.owner.avatarUrl,

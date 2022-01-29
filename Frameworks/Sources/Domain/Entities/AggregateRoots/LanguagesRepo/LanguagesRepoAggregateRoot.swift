@@ -10,15 +10,15 @@ import Foundation
 
 public struct LanguagesRepoAggregateRoot {
   private let repositoryIDs: [String]
-  private let repositoriesByID: [String: RepoAggregate]
-  private let ownersByID: [String: UserAggregate]
-  private let paginationByLanguage: [String: LanguagesPaginationAggregate]
+  private let repositoriesByID: [String: RepoEntity]
+  private let ownersByID: [String: UserEntity]
+  private let paginationByLanguage: [String: LanguagesPaginationEntity]
 
   public init(
     repositoryIDs: [String],
-    repositoriesByID: [String: RepoAggregate],
-    ownersByID: [String: UserAggregate],
-    paginationByLanguage: [String: LanguagesPaginationAggregate]
+    repositoriesByID: [String: RepoEntity],
+    ownersByID: [String: UserEntity],
+    paginationByLanguage: [String: LanguagesPaginationEntity]
   ) {
     self.repositoryIDs = repositoryIDs
     self.repositoriesByID = repositoriesByID
@@ -48,11 +48,11 @@ public struct LanguagesRepoAggregateRoot {
 // MARK: - public
 extension LanguagesRepoAggregateRoot {
 
-  public var repositories: [RepoAggregate] {
+  public var repositories: [RepoEntity] {
     repositoryIDs.compactMap { repositoriesByID[$0] }
   }
 
-  public func filterByLanguage(_ language: String) -> [RepoAggregate] {
+  public func filterByLanguage(_ language: String) -> [RepoEntity] {
     repositoryIDs
       .compactMap { repositoriesByID[$0] }
       .filter { $0.language == language }
