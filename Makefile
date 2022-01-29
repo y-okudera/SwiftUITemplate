@@ -11,6 +11,14 @@ bootstrap: ## Install tools
 	make clean
 	make build-cli-tools
 	make format-configuration
+	bundle config set path 'vendor/bundle'
+	bundle install
+	bundle binstubs generamba --path=vendor/bin
+
+.PHONY: template-flux-%
+template-flux-%: ## Generate swift flux files from template. Use specific module name.
+	bundle exec generamba gen ${@:template-flux-%=%} flux
+	make xcodegen
 
 .PHONY: project
 project: ## Generate project
@@ -31,7 +39,7 @@ open: ## Open Xcode workspace
 .PHONY: clean
 clean: ## Clean generated files
 	rm -rf ./**/Generated/*
-	rm -rf ~/Library/Developer/Xcode/DerivedData/
+	rm -rf ~/Library/Developer/Xcode/DerivedData/*
 	rm -rf Pods
 	rm -rf Carthage
 	rm -rf ./Tools/**/.build/*
@@ -53,7 +61,7 @@ format: ## Reformatting Swift code
 	swift run -c release --package-path ./Tools swift-format -r ./PCSwiftUI -i
 
 .PHONY: build-cli-tools
-build-cli-tools: # Build CLI tools managed by SwiftPM
+build-cli-tools: ## Build CLI tools managed by SwiftPM
 	swift build -c release --package-path ./Tools --product license-plist
 	swift build -c release --package-path ./Tools --product swiftgen
 	swift build -c release --package-path ./Tools --product swift-format

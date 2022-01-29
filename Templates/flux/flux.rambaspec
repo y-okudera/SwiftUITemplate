@@ -1,0 +1,22 @@
+# Template information section
+name: "flux"
+summary: "for Flux application layer"
+author: "Yuki Okudera"
+version: "0.1.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+
+# Action
+- {name: Action.swift, path: Code/action.swift.liquid}
+
+# ActionCreator
+- {name: ActionCreator.swift, path: Code/actioncreator.swift.liquid}
+
+# Dispatcher
+- {name: Dispatcher.swift, path: Code/dispatcher.swift.liquid}
+
+# Store
+- {name: Store.swift, path: Code/store.swift.liquid}

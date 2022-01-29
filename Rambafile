@@ -1,0 +1,23 @@
+### Headers settings
+company: yuoku
+
+### Xcode project settings
+project_name: Templates
+xcodeproj_path: ./App.xcodeproj
+
+### Code generation settings section
+# The main project target name
+project_target: Application
+
+# The file path for new modules
+project_file_path: ./Frameworks/Sources/Application/Flux
+
+# The Xcode group path to new modules
+project_group_path: ./Frameworks/Sources/Application/Flux
+
+# Create Groups in Xcode without folders in filesystem
+create_logical_groups: false
+
+### Templates
+templates:
+- {name: flux, local: Templates}

@@ -1,0 +1,25 @@
+//
+//  {{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import Combine
+
+public final class {{ module_info.name }}Dispatcher {
+  public static let shared = {{ module_info.name }}Dispatcher()
+
+  private let actionSubject = PassthroughSubject<{{ module_info.name }}Action, Never>()
+  private var cancellables: [AnyCancellable] = []
+
+  func register(callback: @escaping ({{ module_info.name }}Action) -> Void) {
+    let actionStream = actionSubject.sink(receiveValue: callback)
+    cancellables += [actionStream]
+  }
+
+  func dispatch(_ action: {{ module_info.name }}Action) {
+    actionSubject.send(action)
+  }
+}

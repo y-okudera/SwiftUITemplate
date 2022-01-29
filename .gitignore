@@ -94,3 +94,7 @@ iOSInjectionProject/
 # XcodeGen
 *.xcodeproj
 !*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+## Bundler
+/vendor/bundle
+/vendor/bin

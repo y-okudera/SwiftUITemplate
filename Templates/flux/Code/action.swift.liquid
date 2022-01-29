@@ -1,0 +1,22 @@
+//
+//  {{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import Domain
+
+enum RepoListAction {
+  /// 検索実行したテキストの変更を反映
+  case updateSearchQuery(String)
+  /// ページ番号を初期化する
+  case initializePage
+  /// 読み込み結果を反映
+  case updateRepoList(RepoAggregateRoot)
+  /// エラーメッセージを反映
+  case updateErrorMessage(String, String)
+  /// エラーを表示
+  case showError
+}
