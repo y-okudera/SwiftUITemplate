@@ -1,5 +1,5 @@
 //
-//  Deeplink.swift
+//  DeepLink.swift
 //  Presentation
 //
 //  Created by Yuki Okudera on 2022/01/10.
@@ -16,7 +16,7 @@ import Foundation
 /// e.g. `gitHubApp://repo?url=https://github.com/octocat/Spoon-Knife`
 ///
 /// e.g. `gitHubApp://user?url=https://github.com/octocat`
-enum Deeplink {
+enum DeepLink {
   case tab(index: Int)
   case repo(urlString: String)
   case user(urlString: String)
@@ -35,16 +35,19 @@ enum Deeplink {
         let index = Int(indexString)
       {
         self = .tab(index: index)
+        print("DeepLink.tab index=\(index)")
         return
       }
     case "repo":
       if let urlString = queryUrlComponents.queryItems?.first(where: { $0.name == "url" })?.value {
         self = .repo(urlString: urlString)
+        print("DeepLink.repo urlString=\(urlString)")
         return
       }
     case "user":
       if let urlString = queryUrlComponents.queryItems?.first(where: { $0.name == "url" })?.value {
         self = .user(urlString: urlString)
+        print("DeepLink.user urlString=\(urlString)")
         return
       }
     default:

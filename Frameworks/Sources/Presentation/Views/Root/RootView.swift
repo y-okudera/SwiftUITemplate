@@ -12,61 +12,53 @@ public struct RootView: View {
 
   public init() {}
 
-  @State private var tabIndex: Int = 0
+  @State private var activeTab = TabIdentifier.repositories
   private let repoListRouter = RepoListRouterImpl(isPresented: .constant(false))
   private let userListRouter = UserListRouterImpl(isPresented: .constant(false))
 
   public var body: some View {
-    TabView(selection: $tabIndex) {
+    TabView(selection: $activeTab) {
       RepoListView(router: repoListRouter)
         .tabItem {
-          VStack {
-            Image(systemName: "doc.text")
-            Text("root_view.tab.repositories", bundle: .current)
-          }
+          TabItemView(titleKey: "root_view.tab.repositories", systemImageName: "doc.text")
         }
-        .tag(0)
+        .tag(TabIdentifier.repositories)
       UserListView(router: userListRouter)
         .tabItem {
-          VStack {
-            Image(systemName: "person.fill")
-            Text("root_view.tab.users", bundle: .current)
-          }
+          TabItemView(titleKey: "root_view.tab.users", systemImageName: "person.fill")
         }
-        .tag(1)
+        .tag(TabIdentifier.users)
       LanguagesTabView()
         .tabItem {
-          VStack {
-            Image(systemName: "text.magnifyingglass")
-            Text("root_view.tab.languages", bundle: .current)
-          }
+          TabItemView(titleKey: "root_view.tab.languages", systemImageName: "text.magnifyingglass")
         }
-        .tag(2)
+        .tag(TabIdentifier.languages)
     }
     .onOpenURL(
       perform: { url in
-        switch Deeplink(url: url) {
+        switch DeepLink(url: url) {
         case .tab(let index):
-          print("Deeplink .tab index=\(index)")
+          guard let tab = TabIdentifier(rawValue: index) else {
+            return
+          }
           // タブを選択
-          tabIndex = index
+          activeTab = tab
+
         case .repo(let urlString):
-          print("Deeplink .repo urlString=\(urlString)")
           // Searchタブを選択
-          tabIndex = 0
+          activeTab = .repositories
           // 指定タブのナビゲーションスタックのルートまでPopする
-          popToRootView(tabIndex: 0)
+          popToRootView(tab: activeTab)
           // 遷移アニメーションが見えるようにするためdelayをかける
           DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(750)) {
             repoListRouter.navigateToGeneralWebView(urlString: urlString)
           }
 
         case .user(let urlString):
-          print("Deeplink .user urlString=\(urlString)")
           // Userタブを選択
-          tabIndex = 1
+          activeTab = .users
           // 指定タブのナビゲーションスタックのルートまでPopする
-          popToRootView(tabIndex: 1)
+          popToRootView(tab: activeTab)
           // 遷移アニメーションが見えるようにするためdelayをかける
           DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(750)) {
             userListRouter.navigateToGeneralWebView(urlString: urlString)
@@ -78,11 +70,11 @@ public struct RootView: View {
     )
   }
 
-  private func popToRootView(tabIndex: Int) {
+  private func popToRootView(tab: TabIdentifier) {
     guard
       let rootViewController = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.rootViewController,
       let tabBarController = rootViewController.children.first as? UITabBarController,
-      let navigationController = tabBarController.viewControllers?[safe: tabIndex]?.children.first as? UINavigationController
+      let navigationController = tabBarController.viewControllers?[safe: tab.rawValue]?.children.first as? UINavigationController
     else {
       return
     }
