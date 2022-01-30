@@ -2,7 +2,7 @@
 company: yuoku
 
 ### Xcode project settings
-project_name: Templates
+project_name: Application
 xcodeproj_path: ./App.xcodeproj
 
 ### Code generation settings section
