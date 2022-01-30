@@ -20,30 +20,39 @@ public final class RootRouter: ObservableObject {
     self.store = store
   }
 
-  func deepLinkValueChanged() {
+  func deepLinkValueChanged() async {
+    defer {
+      store.deepLink = nil
+    }
     switch store.deepLink {
     case .tab(let index):
       guard let tab = TabIdentifier(rawValue: index) else {
         return
       }
+      // モーダルビューがあれば閉じる
+      await dismissAllModals()
       // タブを選択
       store.activeTab = tab
 
     case .repo(let urlString):
+      // モーダルビューがあれば閉じる
+      await dismissAllModals()
       // Repositoriesタブを選択
       store.activeTab = .repositories
-      // 指定タブのナビゲーションスタックのルートまでPopする
-      popToRootView(tab: store.activeTab)
+      // RepositoriesタブのナビゲーションスタックのルートまでPopする
+      popToRootView(tab: .repositories)
       // 遷移アニメーションが見えるようにするためdelayをかける
       DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(750)) { [weak self] in
         self?.repoListRouter.navigateToGeneralWebView(urlString: urlString)
       }
 
     case .user(let urlString):
+      // モーダルビューがあれば閉じる
+      await dismissAllModals()
       // Usersタブを選択
       store.activeTab = .users
-      // 指定タブのナビゲーションスタックのルートまでPopする
-      popToRootView(tab: store.activeTab)
+      // UsersタブのナビゲーションスタックのルートまでPopする
+      popToRootView(tab: .users)
       // 遷移アニメーションが見えるようにするためdelayをかける
       DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(750)) { [weak self] in
         self?.userListRouter.navigateToGeneralWebView(urlString: urlString)
@@ -52,13 +61,20 @@ public final class RootRouter: ObservableObject {
       print("Deeplink none.")
     }
   }
+}
+
+extension RootRouter {
+  private var tabBarController: UITabBarController? {
+    let rootViewController = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.rootViewController
+    return rootViewController?.children.first as? UITabBarController
+  }
+
+  private func dismissAllModals() async {
+    await tabBarController?.dismiss(animated: true)
+  }
 
   private func popToRootView(tab: TabIdentifier) {
-    guard
-      let rootViewController = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.rootViewController,
-      let tabBarController = rootViewController.children.first as? UITabBarController,
-      let navigationController = tabBarController.viewControllers?[safe: tab.rawValue]?.children.first as? UINavigationController
-    else {
+    guard let navigationController = tabBarController?.viewControllers?[safe: tab.rawValue]?.children.first as? UINavigationController else {
       return
     }
     navigationController.popToRootViewController(animated: true)

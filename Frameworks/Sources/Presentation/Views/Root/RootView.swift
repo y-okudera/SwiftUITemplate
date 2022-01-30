@@ -40,7 +40,11 @@ public struct RootView: View {
         .tag(TabIdentifier.languages)
     }
     .onOpenURL(perform: { actionCreator.openURL($0) })
-    .onChange(of: store.deepLink) { _ in router.deepLinkValueChanged() }
+    .onChange(of: store.deepLink) { _ in
+      Task {
+        await router.deepLinkValueChanged()
+      }
+    }
   }
 }
 

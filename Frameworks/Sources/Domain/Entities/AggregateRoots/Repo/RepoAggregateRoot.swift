@@ -15,10 +15,6 @@ public struct RepoAggregateRoot {
   private let repositoriesByID: [String: RepoEntity]
   private let ownersByID: [String: UserEntity]
 
-  public var repositories: [RepoEntity] {
-    repositoryIDs.compactMap { repositoriesByID[$0] }
-  }
-
   public init(
     page: Int,
     hasNext: Bool,
@@ -49,6 +45,14 @@ public struct RepoAggregateRoot {
       repositoriesByID: repositoriesByID,
       ownersByID: ownersByID
     )
+  }
+}
+
+// MARK: - public
+extension RepoAggregateRoot {
+
+  public var repositories: [RepoEntity] {
+    repositoryIDs.compactMap { repositoriesByID[$0] }
   }
 }
 

@@ -21,7 +21,13 @@ public struct UserRepository: UserRepositoryProviding {
       .map { apiResponse in
         let userIDs = apiResponse.response.items.map { $0.id.description }
         let usersByID = apiResponse.response.items.reduce(into: [String: UserEntity]()) {
-          $0[$1.id.description] = UserEntity(id: $1.id.description, login: $1.login, avatarUrl: $1.avatarUrl, htmlUrl: $1.htmlUrl)
+          $0[$1.id.description] = UserEntity(
+            id: $1.id.description,
+            login: $1.login,
+            avatarUrl: $1.avatarUrl,
+            htmlUrl: $1.htmlUrl,
+            type: $1.type
+          )
         }
         return UserAggregateRoot(
           page: page + 1,

@@ -10,6 +10,7 @@ import Foundation
 
 public protocol UserListRouter: Router {
   func navigateToGeneralWebView(urlString: String)
+  func presentUserDetailView(userID: String)
 }
 
 public final class UserListRouterImpl: Router, UserListRouter {
@@ -18,6 +19,13 @@ public final class UserListRouterImpl: Router, UserListRouter {
     let router = Router(isPresented: isNavigating)
     navigateTo(
       GeneralWebView(urlString: urlString, router: router)
+    )
+  }
+
+  public func presentUserDetailView(userID: String) {
+    let router = Router(isPresented: isPresentingSheet)
+    presentSheet(
+      UserDetailView(router: router, userID: userID)
     )
   }
 }

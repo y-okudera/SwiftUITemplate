@@ -13,19 +13,22 @@ struct UserListRow: View {
   @Environment(\.colorScheme) private var colorScheme
   @State var title: String
   @State var avatarUrl: URL
-  let action: () -> Void
+  let rowAction: () -> Void
+  let imageAction: () -> Void
 
   var body: some View {
-    Button(action: action) {
+    Button(action: rowAction) {
       HStack {
-        KFImage(avatarUrl)
-          .cacheOriginalImage()
-          .placeholder { ProgressView() }
-          .fade(duration: 0.5)
-          .resizable()
-          .frame(width: 44, height: 44)
-          .cornerRadius(22)
-          .shadow(color: colorScheme == .light ? .gray : .clear, radius: 2)
+        Button(action: imageAction) {
+          KFImage(avatarUrl)
+            .cacheOriginalImage()
+            .placeholder { ProgressView() }
+            .fade(duration: 0.5)
+            .resizable()
+            .frame(width: 44, height: 44)
+            .cornerRadius(22)
+            .shadow(color: colorScheme == .light ? .gray : .clear, radius: 2)
+        }
         Text(title)
           .lineLimit(1)
           .foregroundColor(colorScheme == .light ? .black : .white)
@@ -41,7 +44,8 @@ struct UserListRow: View {
         UserListRow(
           title: "octocat",
           avatarUrl: resourceUrl(name: "octocat", ofType: "png"),
-          action: {}
+          rowAction: {},
+          imageAction: {}
         )
         .previewLayout(.sizeThatFits)
       }

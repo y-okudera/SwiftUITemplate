@@ -13,4 +13,5 @@ public struct GitHubUser: Decodable {
   public let login: String
   public let avatarUrl: URL
   public let htmlUrl: URL
+  public let type: String
 }

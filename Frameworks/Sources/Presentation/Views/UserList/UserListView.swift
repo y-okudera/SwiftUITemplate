@@ -28,6 +28,8 @@ struct UserListView<R: UserListRouter>: View {
         ForEach(store.userAggregateRoot.users) { user in
           UserListRow(title: user.login, avatarUrl: user.avatarUrl) {
             router.navigateToGeneralWebView(urlString: user.htmlUrl.absoluteString)
+          } imageAction: {
+            router.presentUserDetailView(userID: user.id)
           }
         }
         HStack {
@@ -46,6 +48,7 @@ struct UserListView<R: UserListRouter>: View {
       }
       .navigationBarTitle(Text("user_list_view.navigation_bar_title.users", bundle: .current))
       .navigation(router)
+      .sheet(router)
     }
     .edgesIgnoringSafeArea([.top, .bottom])
   }

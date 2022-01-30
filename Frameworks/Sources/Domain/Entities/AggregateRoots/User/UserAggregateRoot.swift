@@ -14,10 +14,6 @@ public struct UserAggregateRoot {
   private let userIDs: [String]
   private let usersByID: [String: UserEntity]
 
-  public var users: [UserEntity] {
-    userIDs.compactMap { usersByID[$0] }
-  }
-
   public init(page: Int, hasNext: Bool, userIDs: [String], usersByID: [String: UserEntity]) {
     self.page = page
     self.hasNext = hasNext
@@ -33,6 +29,21 @@ public struct UserAggregateRoot {
     let userIDs = userIDs + newValue.userIDs
     let usersByID = usersByID.merging(newValue.usersByID) { $1 }
     self = .init(page: newValue.page, hasNext: newValue.hasNext, userIDs: userIDs, usersByID: usersByID)
+  }
+}
+
+// MARK: - public
+extension UserAggregateRoot {
+
+  public var users: [UserEntity] {
+    userIDs.compactMap { usersByID[$0] }
+  }
+
+  public func filterByID(_ id: String) -> UserEntity? {
+    userIDs
+      .compactMap { usersByID[$0] }
+      .filter { $0.id == id }
+      .first
   }
 }
 

@@ -11,7 +11,7 @@ import Combine
 public final class RootStore: ObservableObject {
   public static let shared = RootStore()
 
-  @Published public private(set) var deepLink: DeepLink?
+  @Published public var deepLink: DeepLink?
   @Published public var activeTab: TabIdentifier = .repositories
 
   init(dispatcher: RootDispatcher = .shared) {

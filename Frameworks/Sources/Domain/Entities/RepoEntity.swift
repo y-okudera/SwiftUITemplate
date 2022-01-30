@@ -47,12 +47,7 @@ public struct RepoEntity: Decodable, Hashable, Identifiable {
         stargazersCount: 10673,
         language: "HTML",
         htmlUrl: URL(string: "https://github.com/octocat/Spoon-Knife")!,
-        owner: UserEntity(
-          id: 583231.description,
-          login: "octocat",
-          avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,
-          htmlUrl: URL(string: "https://github.com/octocat")!
-        )
+        owner: UserEntity.mock
       )
     }
 
@@ -69,7 +64,8 @@ public struct RepoEntity: Decodable, Hashable, Identifiable {
             id: $0.description,
             login: "octocat",
             avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,
-            htmlUrl: URL(string: "https://github.com/octocat")!
+            htmlUrl: URL(string: "https://github.com/octocat")!,
+            type: "User"
           )
         )
       }

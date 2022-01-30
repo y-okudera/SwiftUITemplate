@@ -28,7 +28,13 @@ public struct RepoRepository: RepoRepositoryProviding {
             stargazersCount: $1.stargazersCount,
             language: $1.language,
             htmlUrl: $1.htmlUrl,
-            owner: .init(id: $1.owner.id.description, login: $1.owner.login, avatarUrl: $1.owner.avatarUrl, htmlUrl: $1.owner.htmlUrl)
+            owner: UserEntity(
+              id: $1.owner.id.description,
+              login: $1.owner.login,
+              avatarUrl: $1.owner.avatarUrl,
+              htmlUrl: $1.owner.htmlUrl,
+              type: $1.owner.type
+            )
           )
         }
         let ownersByID = apiResponse.response.items.reduce(into: [String: UserEntity]()) {
@@ -36,7 +42,8 @@ public struct RepoRepository: RepoRepositoryProviding {
             id: $1.owner.id.description,
             login: $1.owner.login,
             avatarUrl: $1.owner.avatarUrl,
-            htmlUrl: $1.owner.htmlUrl
+            htmlUrl: $1.owner.htmlUrl,
+            type: $1.owner.type
           )
         }
         return RepoAggregateRoot(

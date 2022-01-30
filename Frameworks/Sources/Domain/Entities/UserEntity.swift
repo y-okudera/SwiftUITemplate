@@ -13,17 +13,20 @@ public struct UserEntity: Decodable, Hashable, Identifiable {
   public let login: String
   public let avatarUrl: URL
   public let htmlUrl: URL
+  public let type: String
 
   public init(
     id: String,
     login: String,
     avatarUrl: URL,
-    htmlUrl: URL
+    htmlUrl: URL,
+    type: String
   ) {
     self.id = id
     self.login = login
     self.avatarUrl = avatarUrl
     self.htmlUrl = htmlUrl
+    self.type = type
   }
 }
 
@@ -35,7 +38,8 @@ public struct UserEntity: Decodable, Hashable, Identifiable {
         id: 583231.description,
         login: "octocat",
         avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,
-        htmlUrl: URL(string: "https://github.com/octocat")!
+        htmlUrl: URL(string: "https://github.com/octocat")!,
+        type: "User"
       )
     }
 
@@ -45,7 +49,8 @@ public struct UserEntity: Decodable, Hashable, Identifiable {
           id: $0.description,
           login: "octocat",
           avatarUrl: mockAvatarUrl,
-          htmlUrl: URL(string: "https://github.com/octocat")!
+          htmlUrl: URL(string: "https://github.com/octocat")!,
+          type: "User"
         )
       }
     }
