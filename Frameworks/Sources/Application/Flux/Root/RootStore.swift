@@ -19,8 +19,8 @@ public final class RootStore: ObservableObject {
       guard let self = self else { return }
 
       switch action {
-      case .openURL(let url):
-        self.deepLink = .init(url: url)
+      case .openURL(let deepLink):
+        self.deepLink = deepLink
       }
     }
   }

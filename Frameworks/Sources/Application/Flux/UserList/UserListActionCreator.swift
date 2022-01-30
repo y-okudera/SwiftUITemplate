@@ -51,11 +51,6 @@ public final class UserListActionCreator: UserListActionCreatorProviding {
     let responseStream =
       searchUsersSubject
       .share()
-      .map { [dispatcher] searchQuery in
-        dispatcher.dispatch(.initializePage)
-        dispatcher.dispatch(.updateSearchQuery(searchQuery))
-        return searchQuery
-      }
       .flatMap { [userRepository] searchQuery in
         userRepository.response(searchQuery: searchQuery, page: 1)
           .catch { [weak self] apiError -> Empty<UserAggregateRoot, Never> in
@@ -63,13 +58,11 @@ public final class UserListActionCreator: UserListActionCreatorProviding {
             return .init()
           }
       }
-      .share()
       .subscribe(responseSubject)
 
     // additionalSearchUsersSubjectに(string, int)が送られてきたら追加読み込みのAPIリクエストする
     let additionalResponseStream =
       additionalSearchUsersSubject
-      .share()
       .flatMap { [userRepository] searchQuery, page in
         userRepository.response(searchQuery: searchQuery, page: page)
           .catch { [weak self] apiError -> Empty<UserAggregateRoot, Never> in
@@ -77,7 +70,6 @@ public final class UserListActionCreator: UserListActionCreatorProviding {
             return .init()
           }
       }
-      .share()
       .subscribe(additionalResponseSubject)
 
     cancellables += [
@@ -87,6 +79,16 @@ public final class UserListActionCreator: UserListActionCreatorProviding {
   }
 
   private func bindActions() {
+
+    // Pageの初期化とSearchQueryの更新を反映
+    let initialSearchStream =
+      searchUsersSubject
+      .share()
+      .sink(receiveValue: { [dispatcher] searchQuery in
+        dispatcher.dispatch(.initializePage)
+        dispatcher.dispatch(.updateSearchQuery(searchQuery))
+      })
+
     // ユーザー検索結果を反映
     let responseDataStream =
       responseSubject
@@ -127,6 +129,7 @@ public final class UserListActionCreator: UserListActionCreatorProviding {
       .sink(receiveValue: { [dispatcher] in dispatcher.dispatch(.showError) })
 
     cancellables += [
+      initialSearchStream,
       responseDataStream,
       emptyDataStream,
       isEmptyErrorStream,

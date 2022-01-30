@@ -16,6 +16,7 @@ public final class RootActionCreator: RootActionCreatorProviding {
 
   private let dispatcher: RootDispatcher
   private let openURLSubject = PassthroughSubject<URL, Never>()
+  private let deepLinkSubject = PassthroughSubject<DeepLink?, Never>()
 
   private var cancellables: [AnyCancellable] = []
 
@@ -34,16 +35,24 @@ public final class RootActionCreator: RootActionCreatorProviding {
   // MARK: - Binding
 
   private func bindData() {
-    // NOP
+
+    let deepLinkStream =
+      openURLSubject
+      .map { DeepLink(url: $0) }
+      .subscribe(deepLinkSubject)
+
+    cancellables += [
+      deepLinkStream
+    ]
   }
 
   private func bindActions() {
-    let openURLStream =
-      openURLSubject
+    let deepLinkStream =
+      deepLinkSubject
       .sink(receiveValue: { [dispatcher] in dispatcher.dispatch(.openURL($0)) })
 
     cancellables += [
-      openURLStream
+      deepLinkStream
     ]
   }
 }

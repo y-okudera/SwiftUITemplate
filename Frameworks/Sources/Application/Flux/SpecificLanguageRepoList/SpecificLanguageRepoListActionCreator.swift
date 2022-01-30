@@ -49,13 +49,9 @@ public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoLi
     // searchRepositoriesSubjectにstringが送られてきたらAPIリクエストする
     let responseStream =
       searchRepositoriesSubject
-      .filter { $1 }
-      .map { [dispatcher] tuple -> String in
-        let searchQuery = "language:\(tuple.0)"
-        dispatcher.dispatch(.updateSearchQuery(searchQuery))
-        return searchQuery
-      }
       .share()
+      .filter { $1 }
+      .map { tuple -> String in "language:\(tuple.0)" }
       .flatMap { [languagesRepoRepository] searchQuery in
         languagesRepoRepository.response(searchQuery: searchQuery, page: 1)
           .catch { [weak self] apiError -> Empty<LanguagesRepoAggregateRoot, Never> in
@@ -63,12 +59,11 @@ public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoLi
             return .init()
           }
       }
-      .share()
       .subscribe(responseSubject)
 
     // additionalSearchRepositoriesSubjectに(string, int)が送られてきたら追加読み込みのAPIリクエストする
-    let additionalResponsePublisher =
-      additionalSearchRepositoriesSubject.share()
+    let additionalResponseStream =
+      additionalSearchRepositoriesSubject
       .flatMap { [languagesRepoRepository] searchQuery, page in
         languagesRepoRepository.response(searchQuery: searchQuery, page: page)
           .catch { [weak self] apiError -> Empty<LanguagesRepoAggregateRoot, Never> in
@@ -76,10 +71,6 @@ public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoLi
             return .init()
           }
       }
-
-    let additionalResponseStream =
-      additionalResponsePublisher
-      .share()
       .subscribe(additionalResponseSubject)
 
     cancellables += [
@@ -89,6 +80,14 @@ public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoLi
   }
 
   private func bindActions() {
+
+    // SearchQueryの更新を反映
+    let searchStream =
+      searchRepositoriesSubject
+      .share()
+      .map { tuple -> String in "language:\(tuple.0)" }
+      .sink(receiveValue: { [dispatcher] in dispatcher.dispatch(.updateSearchQuery($0)) })
+
     // リポジトリ検索結果を反映
     let responseDataStream =
       responseSubject
@@ -129,6 +128,7 @@ public final class SpecificLanguageRepoListActionCreator: SpecificLanguageRepoLi
       .sink(receiveValue: { [dispatcher] in dispatcher.dispatch(.showError) })
 
     cancellables += [
+      searchStream,
       responseDataStream,
       emptyDataStream,
       isEmptyErrorStream,

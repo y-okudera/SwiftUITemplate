@@ -51,11 +51,6 @@ public final class RepoListActionCreator: RepoListActionCreatorProviding {
     let responseStream =
       searchRepositoriesSubject
       .share()
-      .map { [dispatcher] searchQuery in
-        dispatcher.dispatch(.initializePage)
-        dispatcher.dispatch(.updateSearchQuery(searchQuery))
-        return searchQuery
-      }
       .flatMap { [repoRepository] searchQuery in
         repoRepository.response(searchQuery: searchQuery, page: 1)
           .catch { [weak self] apiError -> Empty<RepoAggregateRoot, Never> in
@@ -63,13 +58,11 @@ public final class RepoListActionCreator: RepoListActionCreatorProviding {
             return .init()
           }
       }
-      .share()
       .subscribe(responseSubject)
 
     // additionalSearchRepositoriesSubjectに(string, int)が送られてきたら追加読み込みのAPIリクエストする
     let additionalResponseStream =
       additionalSearchRepositoriesSubject
-      .share()
       .flatMap { [repoRepository] searchQuery, page in
         repoRepository.response(searchQuery: searchQuery, page: page)
           .catch { [weak self] apiError -> Empty<RepoAggregateRoot, Never> in
@@ -77,7 +70,6 @@ public final class RepoListActionCreator: RepoListActionCreatorProviding {
             return .init()
           }
       }
-      .share()
       .subscribe(additionalResponseSubject)
 
     cancellables += [
@@ -87,6 +79,16 @@ public final class RepoListActionCreator: RepoListActionCreatorProviding {
   }
 
   private func bindActions() {
+
+    // Pageの初期化とSearchQueryの更新を反映
+    let initialSearchStream =
+      searchRepositoriesSubject
+      .share()
+      .sink(receiveValue: { [dispatcher] searchQuery in
+        dispatcher.dispatch(.initializePage)
+        dispatcher.dispatch(.updateSearchQuery(searchQuery))
+      })
+
     // リポジトリ検索結果を反映
     let responseDataStream =
       responseSubject
@@ -127,6 +129,7 @@ public final class RepoListActionCreator: RepoListActionCreatorProviding {
       .sink(receiveValue: { [dispatcher] in dispatcher.dispatch(.showError) })
 
     cancellables += [
+      initialSearchStream,
       responseDataStream,
       emptyDataStream,
       isEmptyErrorStream,

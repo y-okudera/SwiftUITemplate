@@ -9,5 +9,5 @@
 import Foundation
 
 enum RootAction {
-  case openURL(URL)
+  case openURL(DeepLink?)
 }
