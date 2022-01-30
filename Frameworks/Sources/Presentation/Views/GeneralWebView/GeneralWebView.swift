@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct GeneralWebView: View {
-  var urlString: String?
+  private let urlString: String?
   private let router: Router
 
   init(urlString: String?, router: Router) {

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct RepoListView<R: RepoListRouter>: View {
   @Environment(\.colorScheme) private var colorScheme
-  @ObservedObject var store: RepoListStore
+  @ObservedObject private var store: RepoListStore
   @StateObject private var router: R
 
   @Injected(\.repoListActionCreatorProvider)

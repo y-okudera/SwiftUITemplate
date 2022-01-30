@@ -13,8 +13,8 @@ import SwiftUI
 public final class RootRouter: ObservableObject {
 
   @ObservedObject private var store: RootStore
-  public let repoListRouter = RepoListRouterImpl(isPresented: .constant(false))
-  public let userListRouter = UserListRouterImpl(isPresented: .constant(false))
+  let repoListRouter = RepoListRouterImpl(isPresented: .constant(false))
+  let userListRouter = UserListRouterImpl(isPresented: .constant(false))
 
   public init(store: RootStore = .shared) {
     self.store = store
