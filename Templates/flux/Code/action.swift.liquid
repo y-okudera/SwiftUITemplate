@@ -8,7 +8,7 @@
 
 import Domain
 
-enum RepoListAction {
+enum {{ module_info.name }}Action {
   /// 検索実行したテキストの変更を反映
   case updateSearchQuery(String)
   /// ページ番号を初期化する
