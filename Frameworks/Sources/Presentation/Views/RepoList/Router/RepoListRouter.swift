@@ -8,13 +8,13 @@
 
 import Foundation
 
-protocol RepoListRouter: Router {
+public protocol RepoListRouter: Router {
   func navigateToGeneralWebView(urlString: String)
 }
 
-final class RepoListRouterImpl: Router, RepoListRouter {
+public final class RepoListRouterImpl: Router, RepoListRouter {
 
-  func navigateToGeneralWebView(urlString: String) {
+  public func navigateToGeneralWebView(urlString: String) {
     let router = Router(isPresented: isNavigating)
     navigateTo(
       GeneralWebView(urlString: urlString, router: router)

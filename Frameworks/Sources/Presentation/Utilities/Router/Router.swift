@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-class Router: ObservableObject {
+public class Router: ObservableObject {
 
   struct State {
     var navigating: AnyView? = nil

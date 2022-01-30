@@ -1,6 +1,6 @@
 //
 //  DeepLink.swift
-//  Presentation
+//  Application
 //
 //  Created by Yuki Okudera on 2022/01/10.
 //  Copyright © 2022 yuoku. All rights reserved.
@@ -16,13 +16,14 @@ import Foundation
 /// e.g. `gitHubApp://repo?url=https://github.com/octocat/Spoon-Knife`
 ///
 /// e.g. `gitHubApp://user?url=https://github.com/octocat`
-enum DeepLink {
+public enum DeepLink: Equatable {
   case tab(index: Int)
   case repo(urlString: String)
   case user(urlString: String)
 
-  init?(url: URL) {
-    guard url.scheme == "gitHubApp",
+  public init?(url: URL?) {
+    guard let url = url,
+      url.scheme == "gitHubApp",
       let host = url.host,
       let queryUrlComponents = URLComponents(string: url.absoluteString)
     else {
