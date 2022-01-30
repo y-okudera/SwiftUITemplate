@@ -20,3 +20,15 @@ $ make bootstrap
 ```
 $ make project
 ```
+
+## Generate swift flux files from template.
+
+```
+$ make template-flux-<the Module name>
+```
+
+e.g.
+
+```
+$ make template-flux-UserList
+```
