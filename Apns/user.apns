@@ -1,9 +1,0 @@
-{
-    "Simulator Target Bundle": "jp.yuoku.GitHubApp",
-    "aps": {
-        "alert": "テスト通知-ユーザー表示",
-        "sound": "default",
-        "badge": 1
-    },
-    "url": "gitHubApp://user?url=https://github.com/octocat"
-}

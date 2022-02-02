@@ -15,9 +15,10 @@ public protocol RepoListRouter: Router {
 public final class RepoListRouterImpl: Router, RepoListRouter {
 
   public func navigateToGeneralWebView(urlString: String) {
-    let router = Router(isPresented: isNavigating)
-    navigateTo(
-      GeneralWebView(urlString: urlString, router: router)
-    )
+    #warning("遷移処理未定義")
+    //    let router = Router(isPresented: isNavigating)
+    //    navigateTo(
+    //      GeneralWebView(urlString: urlString, router: router)
+    //    )
   }
 }
