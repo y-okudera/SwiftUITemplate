@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WidgetKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -23,6 +24,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     // Reset badge number
     UIApplication.shared.applicationIconBadgeNumber = 0
+
+    // Update widget
+    WidgetCenter.shared.reloadAllTimelines()
 
     return true
   }
