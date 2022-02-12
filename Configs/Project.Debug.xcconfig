@@ -13,5 +13,3 @@
 
 //:configuration = Debug
 GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)
-EXCLUDED_ARCHS[sdk=iphonesimulator*] = arm64
-ONLY_ACTIVE_ARCH = NO
