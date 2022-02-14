@@ -49,9 +49,14 @@ targets:
       - path: Configs
     dependencies:
       - target: Presentation
+        codeSign: false
       - target: Application
+        codeSign: false
       - target: Domain
+        codeSign: false
       - target: Infrastructure
+        codeSign: false
+      - target: Widget
     postCompileScripts:
       - path: ./Scripts/swift-format.sh
         name: swift-format
@@ -75,6 +80,7 @@ targets:
       - package: swift-request
         product: Json
       - target: Domain
+        codeSign: false
 ####################
   # Domain framework
   Domain:
@@ -105,7 +111,9 @@ targets:
           - "**/*.md"
     dependencies:
       - target: Domain
+        codeSign: false
       - target: Infrastructure # RepositoriesのDI用
+        codeSign: false
 ####################
   # Presentation framework
   Presentation:
@@ -122,10 +130,32 @@ targets:
           - "**/*.md"
     dependencies:
       - target: Application
+        codeSign: false
       - package: Kingfisher
         product: Kingfisher
       - package: PagerTabStripView
         product: PagerTabStripView
+####################
+  # Widget
+  Widget:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Configs/Widget.Debug.xcconfig
+      Release: Configs/Widget.Release.xcconfig
+    scheme: {}
+    sources:
+      - path: AppExtension/Widget
+        excludes:
+          - "**/.gitkeep"
+          - "**/*.md"
+    dependencies:
+      - sdk: SwiftUI.framework
+      - sdk: WidgetKit.framework
+      - target: Domain
+        codeSign: false
+      - package: Kingfisher
+        product: Kingfisher
   # Infrastructure frameworkのUnitTestターゲット
   InfrastructureTests:
     type: bundle.unit-test
@@ -194,6 +224,7 @@ schemeTemplates:
     build:
       targets:
         App: all
+        Widget: all
         InfrastructureTests: [test]
         DomainTests: [test]
         ApplicationTests: [test]
@@ -213,9 +244,39 @@ schemeTemplates:
       config: ${debugConfig}
     archive:
       config: ${releaseConfig}
+  WidgetScheme:
+    build:
+      targets:
+        App: all
+        Widget: all
+    run:
+      config: ${debugConfig}
+      askForAppToLaunch: true
+      debugEnabled: false
+      environmentVariables:
+        - variable: _XCWidgetKind
+          value:
+          isEnabled: false
+        - variable: _XCWidgetDefaultView
+          value: timeline
+          isEnabled: false
+        - variable: _XCWidgetFamily
+          value: medium
+          isEnabled: false
+    profile:
+      config: ${releaseConfig}
+    analyze:
+      config: ${debugConfig}
+    archive:
+      config: ${releaseConfig}
 schemes:
   App:
     templates: [AppScheme]
+    templateAttributes:
+      debugConfig: Debug
+      releaseConfig: Release
+  Widget:
+    templates: [WidgetScheme]
     templateAttributes:
       debugConfig: Debug
       releaseConfig: Release

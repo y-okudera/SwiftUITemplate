@@ -52,23 +52,83 @@ public struct RepoEntity: Decodable, Hashable, Identifiable {
     }
 
     public static var mockArray: [Self] {
-      [Int](0..<20).map {
+      [
         Self(
-          id: $0.description,
-          fullName: "octocat/Spoon-Knife",
-          description: "This repo is for demonstration purposes only.",
-          stargazersCount: $0,
-          language: "HTML",
-          htmlUrl: URL(string: "https://github.com/octocat/Spoon-Knife")!,
+          id: "21700699",
+          fullName: "vsouza/awesome-ios",
+          description: "A curated list of awesome iOS ecosystem, including Objective-C and Swift Projects ",
+          stargazersCount: 38983,
+          language: "Swift",
+          htmlUrl: URL(string: "https://github.com/vsouza/awesome-ios")!,
           owner: UserEntity(
-            id: $0.description,
-            login: "octocat",
-            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/583231?v=4")!,
-            htmlUrl: URL(string: "https://github.com/octocat")!,
+            id: "484656",
+            login: "vsouza",
+            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/484656?v=4")!,
+            htmlUrl: URL(string: "https://github.com/vsouza")!,
             type: "User"
           )
-        )
-      }
+        ),
+        Self(
+          id: "22458259",
+          fullName: "Alamofire/Alamofire",
+          description: "Elegant HTTP Networking in Swift",
+          stargazersCount: 37099,
+          language: "Swift",
+          htmlUrl: URL(string: "https://github.com/Alamofire/Alamofire")!,
+          owner: UserEntity(
+            id: "7774181",
+            login: "Alamofire",
+            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/7774181?v=4")!,
+            htmlUrl: URL(string: "https://github.com/Alamofire")!,
+            type: "Organization"
+          )
+        ),
+        Self(
+          id: "60844036",
+          fullName: "shadowsocks/ShadowsocksX-NG",
+          description: "Next Generation of ShadowsocksX",
+          stargazersCount: 30127,
+          language: "Swift",
+          htmlUrl: URL(string: "https://github.com/shadowsocks/ShadowsocksX-NG")!,
+          owner: UserEntity(
+            id: "3006190",
+            login: "shadowsocks",
+            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/3006190?v=4")!,
+            htmlUrl: URL(string: "https://github.com/shadowsocks")!,
+            type: "Organization"
+          )
+        ),
+        Self(
+          id: "109343098",
+          fullName: "serhii-londar/open-source-mac-os-apps",
+          description: "🚀 Awesome list of open source applications for macOS. https://t.me/s/opensourcemacosapps",
+          stargazersCount: 29417,
+          language: "Swift",
+          htmlUrl: URL(string: "https://github.com/serhii-londar/open-source-mac-os-apps")!,
+          owner: UserEntity(
+            id: "15808174",
+            login: "serhii-londar",
+            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/15808174?v=4")!,
+            htmlUrl: URL(string: "https://github.com/serhii-londar")!,
+            type: "User"
+          )
+        ),
+        Self(
+          id: "29887499",
+          fullName: "dkhamsing/open-source-ios-apps",
+          description: ":iphone: Collaborative List of Open-Source iOS Apps",
+          stargazersCount: 29338,
+          language: "Swift",
+          htmlUrl: URL(string: "https://github.com/dkhamsing/open-source-ios-apps")!,
+          owner: UserEntity(
+            id: "4723115",
+            login: "dkhamsing",
+            avatarUrl: URL(string: "https://avatars.githubusercontent.com/u/4723115?v=4")!,
+            htmlUrl: URL(string: "https://github.com/dkhamsing")!,
+            type: "User"
+          )
+        ),
+      ]
     }
   }
 #endif

@@ -1,0 +1,24 @@
+//
+//  Widget.Base.xcconfig
+//  App
+//
+//  Created by Yuki Okudera on 2022/02/11.
+//  Copyright © 2022 yuoku. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Base.xcconfig"
+
+SKIP_INSTALL = YES
+INFOPLIST_KEY_CFBundleDisplayName = Widget
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @executable_path/../../Frameworks
+INFOPLIST_FILE = Widget/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = jp.yuoku.GitHubApp.Widget
+PRODUCT_NAME = $(TARGET_NAME)
+CODE_SIGN_IDENTITY = iPhone Developer
+CODE_SIGN_STYLE = Automatic
+CLANG_CXX_LANGUAGE_STANDARD = gnu++17
+ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor
+ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground
